@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "Car Service",
+    "slug": "car_service",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

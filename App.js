@@ -1,21 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { AppRegistry } from "react-native";
+import { NativeRouter, Redirect, Route } from "react-router-native";
+
+import AuthLayout from "./layouts/AuthLayout";
+import UserLayout from "./layouts/UserLayout";
 
 export default function App() {
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NativeRouter>
+      <Route path="/auth" component={AuthLayout} />
+      <Route path="/user" component={UserLayout} />
+      <Redirect from="/" to="/auth" />
+    </NativeRouter>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+AppRegistry.registerComponent("MyApp", () => App);
