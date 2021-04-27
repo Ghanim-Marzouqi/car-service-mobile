@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-native";
-import { StyleSheet, View, Text, SafeAreaView, FlatList, StatusBar, TouchableOpacity } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
+import { Appbar, Button } from 'react-native-paper';
 
 import { getAllServices } from "../services/ServicesService";
 
 const Item = ({ id, name }) => {
   const history = useHistory();
   return (
-    <TouchableOpacity style={styles.item} onPress={() => history.push(`/user/service-details/${id}`)}>
-      <Text style={styles.title}>{name}</Text>
-    </TouchableOpacity>
+    <Button style={styles.listItem} mode="text" onPress={() => history.push(`/user/service-details/${id}`)}>
+      {name}
+    </Button>
   );
 }
 
 export default function Services() {
+  const history = useHistory();
   const [services, setServices] = useState([]);
   const renderItem = ({ item }) => <Item id={item.id} name={item.name} />;
 
@@ -34,36 +36,29 @@ export default function Services() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.pageTitle}>List of Services</Text>
-      <FlatList
-        data={services}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-      />
-    </SafeAreaView>
+    <>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => history.goBack()} />
+        <Appbar.Content title="List of Services" />
+      </Appbar.Header>
+      <View style={styles.container}>
+        <FlatList
+          data={services}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+        />
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    alignItems: 'flex-start'
   },
-  item: {
-    backgroundColor: '#007bff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 20,
-    color: 'white'
-  },
-  pageTitle: {
-    padding: 10,
-    fontSize: 20,
-    fontWeight: "bold",
-    alignSelf: "center"
+  listItem: {
+    width: '100%',
+    alignItems: 'flex-start'
   }
 });

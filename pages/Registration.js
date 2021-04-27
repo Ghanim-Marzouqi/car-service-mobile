@@ -1,20 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-native";
 import {
   StyleSheet,
+  SafeAreaView,
+  ScrollView,
   Text,
   View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback
+  Image
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import { Button, TextInput } from "react-native-paper";
+import { Dropdown } from 'sharingan-rn-modal-dropdown';
 
 import Logo from "../assets/icon.png";
 import { createUser } from "../services/AuthService";
+import { getRegions, getWillayats } from "../services/GeneralService";
+
+export const data = [
+  {
+    value: '1',
+    label: 'Tiger Nixon'
+  },
+  {
+    value: '2',
+    label: 'Garrett Winters'
+  },
+  {
+    value: '3',
+    label: 'Ashton Cox'
+  },
+  {
+    value: '4',
+    label: 'Cedric Kelly'
+  },
+];
 
 export default function Registration() {
+  const [regions, setRegions] = useState([]);
+  const [willayats, setWillayats] = useState([]);
   const history = useHistory();
   const [form, setForm] = useState({
     name: "",
@@ -26,6 +48,38 @@ export default function Registration() {
     region_id: "1",
     willayat_id: "1"
   });
+
+  useEffect(() => {
+    const fetchAllRegions = async () => {
+      const response = await getRegions();
+
+      if (response !== null) {
+        setRegions(response.data.map(el => ({ value: el.id, label: el.name })));
+      } else {
+        alert("Server Error");
+      }
+    }
+
+    fetchAllRegions();
+  }, []);
+
+  const regionChangeHandler = async (regionId) => {
+    if (regionId) {
+      setForm({ ...form, region_id: regionId });
+      fetchAllWillayatsByRegionId(regionId);
+    }
+  }
+
+  const fetchAllWillayatsByRegionId = async (id) => {
+    const response = await getWillayats({ id });
+
+    if (response !== null) {
+      setWillayats(response.data.map(el => ({ value: el.id, label: el.name })));
+    } else {
+      alert("Server Error");
+    }
+  }
+
   const isValidEmail = (email) => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -88,7 +142,7 @@ export default function Registration() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <TextInput
         style={styles.textInput}
         placeholder="Please Enter Name"
@@ -117,29 +171,43 @@ export default function Registration() {
         value={form.password}
         secureTextEntry
         onChangeText={text => setForm({ ...form, password: text })} />
-      {/* <Picker>
-        selectedValue={"Java"}
-        onValueChange={(itemValue, itemIndex) => { }}
-      >
-        <Picker.Item label="Java" value="java" />
-        <Picker.Item label="JavaScript" value="js" />
-      </Picker> */}
-      <TouchableOpacity style={styles.registerButton} onPress={registerButtonHandler}>
-        <Text style={{ color: 'white' }}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableWithoutFeedback onPress={() => history.goBack()}>
-        <Text style={styles.backButton}>Already Registered</Text>
-      </TouchableWithoutFeedback>
-    </View>
+      <View style={{ height: 50, width: 250, alignSelf: 'center', marginTop: 10 }}>
+        <Dropdown
+          label="Region"
+          data={regions}
+          enableSearch
+          value={form.region_id}
+          onChange={regionChangeHandler}
+          textInputStyle={{ width: 250, alignSelf: 'center', height: 50 }}
+        />
+      </View>
+      <View style={{ height: 60, width: 250, alignSelf: 'center' }}>
+        <Dropdown
+          label="Willayat"
+          data={willayats}
+          enableSearch
+          value={form.willayat_id}
+          onChange={value => setForm({ ...form, willayat_id: value })}
+          textInputStyle={{ width: 250, alignSelf: 'center', height: 50 }}
+        />
+      </View>
+      <Button style={styles.button} mode="contained" onPress={registerButtonHandler}>
+        Sign Up
+        </Button>
+      <Button style={styles.button} mode="text" onPress={() => history.goBack()}>
+        Already Registered
+      </Button>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
+    flexDirection: "column",
+    marginHorizontal: 20,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   logoText: {
     fontWeight: 'bold',
@@ -149,22 +217,12 @@ const styles = StyleSheet.create({
   textInput: {
     width: 250,
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    padding: 10,
     marginTop: 10,
-    borderRadius: 5
+    alignSelf: 'center'
   },
-  registerButton: {
+  button: {
     width: 250,
-    alignItems: 'center',
-    backgroundColor: '#007bff',
-    padding: 10,
-    marginTop: 10
-  },
-  backButton: {
-    alignItems: 'center',
-    padding: 10,
-    marginTop: 10
+    marginTop: 10,
+    alignSelf: 'center'
   }
 });

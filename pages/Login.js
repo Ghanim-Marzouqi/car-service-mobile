@@ -4,11 +4,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback
+  Image
 } from "react-native";
+import { Button, TextInput } from "react-native-paper";
 
 import Logo from "../assets/icon.png";
 import { authenticateUser } from "../services/AuthService";
@@ -66,12 +64,12 @@ export default function Login() {
         value={form.password}
         secureTextEntry
         onChangeText={text => setForm({ ...form, password: text })} />
-      <TouchableOpacity style={styles.loginButton} onPress={loginButtonHandler}>
-        <Text style={{ color: 'white' }}>Sign In</Text>
-      </TouchableOpacity>
-      <TouchableWithoutFeedback onPress={() => history.push("/auth/register")}>
-        <Text style={styles.registerButton}>Sign Up</Text>
-      </TouchableWithoutFeedback>
+      <Button style={styles.button} mode="contained" onPress={loginButtonHandler}>
+        Sign In
+      </Button>
+      <Button style={styles.button} mode="text" onPress={() => history.push("/auth/register")}>
+        Sign Up
+      </Button>
     </View>
   );
 }
@@ -91,22 +89,10 @@ const styles = StyleSheet.create({
   textInput: {
     width: 250,
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 5
-  },
-  loginButton: {
-    width: 250,
-    alignItems: 'center',
-    backgroundColor: '#007bff',
-    padding: 10,
     marginTop: 10
   },
-  registerButton: {
-    alignItems: 'center',
-    padding: 10,
+  button: {
+    width: 250,
     marginTop: 10
   }
 });

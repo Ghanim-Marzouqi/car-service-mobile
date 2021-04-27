@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-native";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { StyleSheet, View, Text } from "react-native";
+import { Appbar, Button } from 'react-native-paper';
 
 import { getValueFor, remove } from "../utils/StoreUtils";
 
@@ -36,21 +36,27 @@ export default function Dashboard() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.userContainer}>
-        <Ionicons name="person-circle-outline" size={24} color="black" />
-        <Text style={{ fontWeight: "bold" }}>Welcome, {user.name}</Text>
-        <AntDesign name="logout" size={24} color="black" onPress={logoutButtonHandler} />
+    <>
+      <Appbar.Header>
+        <Appbar.Content title="Dashboard" />
+        <Appbar.Action icon="logout" onPress={logoutButtonHandler} />
+      </Appbar.Header>
+      <View>
+        <View style={styles.userContainer}>
+          <Text style={{ fontSize: 20 }}>Welcome, </Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{user.name}</Text>
+        </View>
+        <View style={styles.buttonsContainer}>
+          <Button style={styles.button} mode="contained" onPress={() => history.push("/user/services")}>
+            Services
+          </Button>
+          <Button style={styles.button} mode="contained" onPress={() => history.push("/user/my-bookings")}>
+            My Bookings
+          </Button>
+        </View>
       </View>
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => history.push("/user/services")}>
-          <Text style={{ color: 'white' }}>Services</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => history.push("/user/my-bookings")}>
-          <Text style={{ color: 'white' }}>My Bookings</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </>
+
   );
 }
 
@@ -62,22 +68,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   userContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    width: '90%'
+    flexDirection: "row",
+    padding: 5
   },
   buttonsContainer: {
     flexDirection: 'column',
-    marginTop: 30,
     alignItems: 'center',
     justifyContent: 'center',
+    height: '80%'
   },
   button: {
     width: 250,
-    alignItems: 'center',
-    backgroundColor: '#007bff',
-    padding: 10,
     marginTop: 10
   }
 });

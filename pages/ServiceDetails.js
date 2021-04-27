@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-native";
-import { StyleSheet, View, Text, SafeAreaView, StatusBar, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
+import { Appbar, Button } from 'react-native-paper';
 
 import { getServiceById } from "../services/ServicesService";
 
@@ -29,51 +30,44 @@ export default function ServiceDetails() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Service Details Page</Text>
+    <>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => history.goBack()} />
+        <Appbar.Content title={service.name} />
+      </Appbar.Header>
+      <View style={styles.container}>
+        <View style={{ flexDirection: "column" }}>
+          <Text style={styles.title}>Service Description</Text>
+          <Text style={styles.content}>{service.description}</Text>
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.title}>Service Price</Text>
+          <Text style={styles.content}>{service.price} O.R</Text>
+        </View>
+        <Button style={styles.button} mode="contained" onPress={() => history.push("/user/garages")}>
+          Select Service
+        </Button>
       </View>
-      <Text style={styles.serviceTitle}>Service Name: {service.name}</Text>
-      <Text style={styles.serviceDesc}>{service.description}</Text>
-      <Text style={styles.servicePrice}>Service Price: {service.price}</Text>
-      <TouchableOpacity style={styles.button} onPress={() => history.push("/user/garages")}>
-        <Text style={{ color: 'white' }}>Select Service</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  titleContainer: {
-    alignSelf: "center",
-    padding: 10
+    flex: 1
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold"
-  },
-  serviceTitle: {
+    fontWeight: 'bold',
     fontSize: 15,
     padding: 10
   },
-  serviceDesc: {
-    fontSize: 15,
-    padding: 10
-  },
-  servicePrice: {
-    fontSize: 15,
-    padding: 10
+  content: {
+    padding: 10,
+    fontSize: 15
   },
   button: {
     width: 250,
-    alignItems: 'center',
-    backgroundColor: '#007bff',
-    padding: 10,
-    marginTop: 10,
-    alignSelf: "center"
+    marginTop: 20,
+    alignSelf: 'center'
   }
 });
