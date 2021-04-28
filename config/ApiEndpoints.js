@@ -9,3 +9,4 @@ export const GET_GARAGE_BY_ID_URL = "/g/garage-details";
 export const CREATE_BOOKING_URL = "/b/booking";
 export const GET_ALL_BOOKING_URL = "/b/customer-bookings";
 export const UPDATE_BOOKING_STATUS_URL = "/b/customer-payment";
+export const SEND_EMAIL_URL = "/general/send-email";

@@ -5,8 +5,9 @@ import { Appbar, Button } from "react-native-paper";
 
 import { getValueFor } from "../utils/StoreUtils";
 import { getAllBookings, updateBooingStatus } from "../services/BookingsService";
+import { sendEmail } from "../services/GeneralService";
 
-const Item = ({ booking }) => {
+const Item = ({ booking, email }) => {
   const history = useHistory();
 
   const handlePaymentButton = async (bookingId) => {
@@ -15,6 +16,11 @@ const Item = ({ booking }) => {
     if (response !== null) {
       if (response.status === "success") {
         alert(response.message);
+        sendEmail({
+          email,
+          subject: "Payment made successfully",
+          message: "Payment has done successfully"
+        });
         history.goBack();
       } else {
         alert(response.message);
@@ -94,7 +100,7 @@ export default function MyBookings() {
     fetchAllBookingsByCustomerId(user.id);
   }, [user]);
 
-  const renderItem = ({ item }) => <Item booking={item} />;
+  const renderItem = ({ item }) => <Item booking={item} email={user.email} />;
 
   return (
     <>
