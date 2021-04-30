@@ -7,42 +7,19 @@ import { getValueFor } from "../utils/StoreUtils";
 import { getAllBookings, updateBooingStatus } from "../services/BookingsService";
 import { sendEmail } from "../services/GeneralService";
 
-const Item = ({ booking, email }) => {
-  const history = useHistory();
+const Item = ({ booking }) => {
 
-  const handlePaymentButton = async (bookingId) => {
-    const response = await updateBooingStatus(bookingId);
-
-    if (response !== null) {
-      if (response.status === "success") {
-        alert(response.message);
-        sendEmail({
-          email,
-          subject: "Payment made successfully",
-          message: "Payment has done successfully"
-        });
-        history.goBack();
-      } else {
-        alert(response.message);
+  const getBookingStatus = (status) => {
+    if (status) {
+      if (status === "P") {
+        return <Text style={{ fontSize: 15, color: 'orange' }}>Pending</Text>;
+      } else if (status === "C") {
+        return <Text style={{ fontSize: 15, color: 'green' }}>Confirmed</Text>;
+      } else if (status === "R") {
+        return <Text style={{ fontSize: 15, color: 'red' }}>Rejected</Text>;
       }
     } else {
-      alert("Server Error");
-    }
-  }
-
-  const getStatusComponent = (isConfirmed, isPaid, bookingId) => {
-    if (isConfirmed === 1) {
-      if (isPaid === 1) {
-        return <Text style={{ fontSize: 15, fontWeight: "bold" }}>Paid</Text>
-      } else {
-        return (
-          <Button mode="contained" onPress={() => handlePaymentButton(bookingId)}>
-            Pay Now
-          </Button>
-        );
-      }
-    } else {
-      return <Text style={{ fontSize: 15, fontWeight: "bold" }}>Pending</Text>;
+      return "Unknown";
     }
   }
 
@@ -50,7 +27,7 @@ const Item = ({ booking, email }) => {
     <View style={styles.listItem}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10 }}>
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>Date: {booking.booking_date.split(".")[0].replace("T", " ")}</Text>
-        {getStatusComponent(booking.is_confirmed, booking.is_paid, booking.id)}
+        <Text style={{ fontSize: 15 }}>{getBookingStatus(booking.status)}</Text>
       </View>
     </View>
   );
@@ -100,7 +77,7 @@ export default function MyBookings() {
     fetchAllBookingsByCustomerId(user.id);
   }, [user]);
 
-  const renderItem = ({ item }) => <Item booking={item} email={user.email} />;
+  const renderItem = ({ item }) => <Item booking={item} />;
 
   return (
     <>
@@ -116,7 +93,6 @@ export default function MyBookings() {
         />
       </View>
     </>
-
   );
 }
 
