@@ -67,7 +67,7 @@ export default function Login() {
       <Button style={styles.button} mode="contained" onPress={loginButtonHandler}>
         Sign In
       </Button>
-      <Button style={styles.button} mode="text" onPress={() => history.push("/auth/register")}>
+      <Button style={styles.button} mode="outlined" onPress={() => history.push("/auth/register")}>
         Sign Up
       </Button>
     </View>

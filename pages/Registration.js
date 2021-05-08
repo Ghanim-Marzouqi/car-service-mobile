@@ -194,7 +194,7 @@ export default function Registration() {
       <Button style={styles.button} mode="contained" onPress={registerButtonHandler}>
         Sign Up
         </Button>
-      <Button style={styles.button} mode="text" onPress={() => history.goBack()}>
+      <Button style={styles.button} mode="outlined" onPress={() => history.goBack()}>
         Already Registered
       </Button>
     </SafeAreaView>
