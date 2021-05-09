@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-native";
+import { useHistory, useParams } from "react-router-native";
 import { StyleSheet, View, FlatList } from "react-native";
 import { Appbar, Button } from 'react-native-paper';
 
@@ -17,6 +17,7 @@ const Item = ({ id, name }) => {
 
 export default function Garages() {
   const history = useHistory();
+  const { id } = useParams();
   const [garages, setGarages] = useState([]);
   const [user, setUser] = useState({
     id: 0,
@@ -43,8 +44,8 @@ export default function Garages() {
   }, []);
 
   useEffect(() => {
-    fetchAllGarages({ region_id: user.region_id, willayat_id: user.willayat_id });
-  }, [user]);
+    fetchAllGarages({ region_id: user.region_id, willayat_id: user.willayat_id, service_id: id });
+  }, [user, id]);
 
   const fetchAllGarages = async (payload) => {
     const response = await getAllGarages(payload);

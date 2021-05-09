@@ -40,11 +40,7 @@ export default function ServiceDetails() {
           <Text style={styles.title}>Service Description</Text>
           <Text style={styles.content}>{service.description}</Text>
         </View>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={styles.title}>Service Price</Text>
-          <Text style={styles.content}>{service.price} O.R</Text>
-        </View>
-        <Button style={styles.button} mode="contained" onPress={() => history.push("/user/garages")}>
+        <Button style={styles.button} mode="contained" onPress={() => history.push(`/user/garages/${service.id}`)}>
           Select Service
         </Button>
       </View>
